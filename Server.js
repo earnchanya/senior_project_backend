@@ -48,7 +48,7 @@ Server.get('/', async(req, res) => {
 Server.get('/results', async(req, res) => {
   let a = req.query.category
   // console.log(a)
-  if (a === 'forest') {
+  if (a === 'forest' || a === 'Forest') {
     try {
       const data = await db.threadDetails.find({'total_probability.0': {$gte: 0.5}})
       .sort({'total_probability.0':-1}).limit(10)
@@ -58,9 +58,9 @@ Server.get('/results', async(req, res) => {
       res.status(500).send(e)
     }
   }
-  else if (a === 'mountain') {
+  else if (a === 'mountain' || a === 'Mountain') {
     try {
-      const data = await db.threadDetails.find({'total_probability.1': {$gte: 0.5}})
+      const data = await db.threadDetails.find({'total_probability.1': {$gte: 0.2}})
       .sort({'total_probability.1':-1}).limit(10)
       .then(threads => threads)
       res.send({threads:data})
@@ -68,10 +68,20 @@ Server.get('/results', async(req, res) => {
       res.status(500).send(e)
     }
   }
-  else if (a === 'sea') {
+  else if (a === 'sea' || a === 'Sea') {
     try {
       const data = await db.threadDetails.find({'total_probability.2': {$gte: 0.5}})
       .sort({'total_probability.2':-1}).limit(20)
+      .then(threads => threads)
+      res.send({threads:data})
+    } catch(e) {
+      res.status(500).send(e)
+    }
+  }
+  else if (a === 'waterfall' || a === 'Waterfall') {
+    try {
+      const data = await db.threadDetails.find({'total_probability.3': {$gte: 0.5}})
+      .sort({'total_probability.3':-1}).limit(20)
       .then(threads => threads)
       res.send({threads:data})
     } catch(e) {
